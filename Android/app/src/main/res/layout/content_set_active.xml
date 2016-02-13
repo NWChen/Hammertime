@@ -24,7 +24,6 @@
             android:id="@+id/ibActiveBack"
             android:background="@android:drawable/ic_menu_close_clear_cancel" />
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,6 +34,7 @@
             android:textSize="50dp"/>
 
         <TextClock
+            android:id="@+id/tcClock"
             android:textColor="#ffffff"
             android:textSize="25dp"
             android:gravity="center"
@@ -58,6 +58,16 @@
             android:textColor="#ffffff"
             android:gravity="center"
             android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/tvLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Light value here"
+            android:textColor="#ffffff"
+            android:gravity="center" />
+
+
     </LinearLayout>
 
 
