@@ -1,20 +1,96 @@
-.mdl-layout__drawer-button:before {
-    content: '';
+html, body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased !important;
+  margin: 0;
+  padding: 0;
 }
 
+.mdl-layout__drawer-button:before {
+  content: '';
+}
 
-.background {
-  position: absolute;
+/*.mdl-layout__header-row a:hover, .mdl-layout-title:hover {
+  color: #2196F3; 
+}*/
+
+/* home */
+#welcome {
+  position: relative;
+  height: 800px;
   right: 0;
   left: 0;
   top: 0;
   bottom: 0;
-  background: url('/static/background.jpg') center / cover;
-  -webkit-filter: sepia(1.0) opacity(0.4);
 }
-.demo-layout-transparent .mdl-layout__header,
-.demo-layout-transparent .mdl-layout__drawer-button {
-  /* This background is dark, so we set text to white. Use 87% black instead if
-     your background is light. */
-  /*color: white;*/
+
+#welcome:after{
+  content:'';
+  background: url('/static/background.jpg') center / cover;
+  -webkit-filter: sepia(1.0);
+  opacity: 0.4;
+  position:absolute;
+  top:0;
+  left:0;
+  right: 0;
+  bottom: 0;
+}
+
+.slogan-wrapper {
+  position:relative;
+  z-index:1;
+  padding-top: 200px;
+  text-align: center;
+}
+
+.slogan-wrapper .slogan {
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 32px
+}
+
+@media (max-width: 480px) {
+  #welcome {
+    max-height: calc(100% - 56px);
+  }
+  .slogan-wrapper {
+    padding-top: 100px;
+  }
+}
+
+@media (min-width: 481px) {
+  .slogan-wrapper .slogan {
+    font-size: 45px;
+    line-height: 48px;
+  }
+}
+
+.scroll-button {
+  margin-top: 15px;
+}
+
+.header-text {
+  font-size: 36px;
+  line-height: 32px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  padding-top: 10px;
+}
+
+@media (min-width: 481px) {
+  .container {
+    padding: 40px;
+  }
+}
+
+#specs .image {
+  min-height: 250px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#specs .description {
+  margin: 10px 0;
+  text-align: center;
 }

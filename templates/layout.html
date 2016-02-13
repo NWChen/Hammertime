@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script defer src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+    <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script> -->
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
   </head>
 <body>
-    
   <!-- Always shows a header, even in smaller screens. -->
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header demo-layout">
-    <div class="background"></div>
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
         <!-- Title -->
@@ -22,27 +22,19 @@
         <div class="mdl-layout-spacer"></div>
         <!-- Navigation. We hide it in small screens. -->
         <nav class="mdl-navigation mdl-layout--large-screen-only">
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="/dashboard">Dashboard</a>
         </nav>
       </div>
     </header>
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">HammerTime</span>
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="/dashboard">Dashboard</a>
       </nav>
     </div>
     <main class="mdl-layout__content">
       <div class="page-content">{% block body %}{% endblock %}</div>
     </main>
   </div>
-
-
 </body>
 </html>

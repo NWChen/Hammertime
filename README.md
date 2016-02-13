@@ -12,3 +12,6 @@
 #### Color Scheme:
 - blue grey: `#607D8B`
 - blue: `#2196F3`
+#### breakpoints:
+480, 840
+https://gionkunz.github.io/chartist-js/getting-started.html

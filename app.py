@@ -5,7 +5,7 @@ app.debug = True
 
 @app.route("/")
 def hello():
-    return render_template('layout.html')
+    return render_template('home.html')
 
 if __name__ == "__main__":
     app.run()
