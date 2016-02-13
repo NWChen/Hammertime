@@ -1,0 +1,20 @@
+.mdl-layout__drawer-button:before {
+    content: '';
+}
+
+
+.background {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: url('/static/background.jpg') center / cover;
+  -webkit-filter: sepia(1.0) opacity(0.4);
+}
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-layout__drawer-button {
+  /* This background is dark, so we set text to white. Use 87% black instead if
+     your background is light. */
+  /*color: white;*/
+}
