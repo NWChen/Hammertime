@@ -4,6 +4,11 @@
 #define HIT_THRESHOLD 600
 #define REWIND_THRESHOLD 300
 
+unsigned long prevMillis = 0;
+unsigned long currentMillis = millis();
+unsigned long prevMillis2 = 0;
+unsigned long currentMillis2 = millis();
+
 void setup() { 
   Serial.begin(9600);
   pinMode(CW, OUTPUT); 
@@ -15,16 +20,21 @@ void loop() {
     if(Serial.read()=='1')
       hammertime();
     else stop_hammer();
-    delay(10);
   }
 }
 
 void hammertime() {
   Serial.println("Stop! Hammer time!");
-  hit();
-  delay(500);
-  rewind();
-  delay(100);
+  currentMillis = millis();
+  currentMillis2 = millis();
+  if(currentMillis - prevMillis >= 500) {
+    hit();
+    prevMillis = currentMillis;
+  }
+  if(currentMillis2 - prevMillis2 >= 100) {
+    rewind();
+    prevMillis2 = currentMillis2;
+  }
 }
 
 void hit() {
