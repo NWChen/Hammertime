@@ -43,6 +43,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <TextClock
+            android:id="@+id/tcInvClock"
+            android:format12Hour="hh:mm:ss a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
+
 
     </LinearLayout>
 
