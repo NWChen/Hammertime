@@ -1,0 +1,34 @@
+import os
+import serial
+
+class Alarm:
+	
+	def __init__(self):
+		self.alarm_file = "alarm.mp3"
+		self.ser = serial.Serial('/dev/ttyACM0', 9600)	
+		self.is_playing = False
+	
+	def play_sound(self):
+		os.system("omxplayer -o
+ local " + self.alarm_file
+
+	def stop_sound(self):
+		pass
+
+
+	def hammer(self):
+		self.ser.write('1')
+
+	
+	def stop_hammer(self):
+		self.ser.write('0')
+
+	
+	def hammertime(self):
+		self.play_sound()
+		self.hammer()
+
+alarm = Alarm()
+
+alarm.hammer()
+alarm.play_sound()
