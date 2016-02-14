@@ -1,17 +1,25 @@
-$.jsonp("localhost:5000/home").then(populateCharts(data))
+$.getJSON("http://localhost:8080/get_data").then(populateCharts)
 
 function populateCharts(data) {
-  var data = [1,2,3,4,5,6,7]
+  var data = data.data;
   var series = []
   var labels = []
+  var alarmTimes = []
+  var wakeUpTimes = []
+
   for (var i = 0; i < data.length; i++) {
-    // data[i].alarmTime
-    // data[i].wakeUpTime
-    var now = moment().local(); // alarmTime
-    var then = moment().local().add(i, 'minutes'); // wakeUpTime
-    var minutes = moment.duration(then.diff(now)).minutes()
-    series.push(minutes)
-    labels.push(now.month() + "/" + now.day())
+    var alarmTime = data[i].alarm_time["$date"];
+    var wakeUpTime = data[i].wake_up_time["$date"];
+    alarmTimes.push(alarmTime);
+    wakeUpTimes.push(wakeUpTime);
+    var now = moment(alarmTime).local(); 
+    var then = moment(wakeUpTime).local();
+    var minutes = moment.duration(then.diff(now)).minutes();
+    // console.log(minutes);
+    series.push(minutes);
+    var label = now.format("MMM D");
+    // console.log(label);
+    labels.push(label);
   };
 
   var data = {
@@ -28,24 +36,9 @@ function populateCharts(data) {
       },
       scaleMinSpace: 15
     }
-
   };
 
   new Chartist.Bar('#chart1', data, options);
-
-  var data = [1,2,3,4,5,6,7]
-  var alarmTimes = []
-  var wakeUpTimes = []
-
-  for (var i = 0; i < data.length; i++) {
-    // data[i].alarmTime
-    // data[i].wakeUpTime
-    var now = moment().local(); 
-    var then = moment().local().add(i, 'minutes'); 
-    
-    alarmTimes.push(now.toDate().getTime());
-    wakeUpTimes.push(then.toDate().getTime());
-  };
 
   var data = {
     labels: labels,
