@@ -11,6 +11,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.camera2.CameraManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -36,11 +37,12 @@ import java.util.TimerTask;
 
 public class SetActive extends AppCompatActivity implements View.OnClickListener, SensorEventListener{
 
-    final String requestURL = "http://160.39.166.246:8002/user_awake";
+    final String requestURL = "http://160.39.166.246:9000/user_awake";
     final float LIGHT_THRESHHOLD = 15;
     final float ACCEL_THRESHHOLDX = 1.0F, ACCEL_THRESHHOLDY = 0,ACCEL_THRESHHOLDZ = 0;
     float threshhold = 0, threshholdx = 0, threshholdy = 0, threshholdz = 0;
     SensorManager sensorManager;
+    Sensor extra;
     Sensor sensor;
     ImageButton ibActiveBack;
     TextView tvLight,tvAlarmTime;
@@ -48,6 +50,7 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
     private String cameraId;
     boolean currBool, prevBool = false, inTimer = false;
     static int seconds = 0;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_set_active);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mediaPlayer = MediaPlayer.create(this,R.raw.alarm);
 
         /*
         Getting the views from the xml
@@ -107,6 +112,7 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onSensorChanged(SensorEvent event) {
         //tvLight.setText("Hi");
+
         float ill = event.values[0];
         float illy = event.values[1];
         float illz = event.values[2];
@@ -141,13 +147,25 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
                     conn.setRequestProperty("Content-Type","application/json");
                     conn.connect();
 
+
+
                     //Set up JSON object
                     JSONObject jsonParam = new JSONObject();
                     if (threshhold != 0) {
-                        if (ill > threshhold)
+                        if (ill > threshhold) {
+                            if (mediaPlayer.isPlaying())
+                                mediaPlayer.pause();
                             jsonParam.put("isAwake", true);
-                        else
+
+                        }
+
+                        else {
+
+                            mediaPlayer.start();
                             jsonParam.put("isAwake", false);
+                        }
+
+
                     } else {
 
                     }
