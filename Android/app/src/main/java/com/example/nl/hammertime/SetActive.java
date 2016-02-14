@@ -67,10 +67,11 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
         if (currentMinuteS.charAt(0) == '0')
             currentMinute = Integer.parseInt(currentMinuteS.substring(1,2));
 
-        if (currentHour > SetAlarm.hourChosen)
+        if (currentHour > SetAlarm.hourChosen || (currentHour == SetAlarm.hourChosen && currentMinute >= SetAlarm.minuteChosen)) {
             tvLight.setText("YES");
-        else if (currentHour == SetAlarm.hourChosen && currentMinute >= SetAlarm.minuteChosen)
-            tvLight.setText("YES");
+
+        }
+
         else
             tvLight.setText("NO");
     }

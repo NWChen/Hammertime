@@ -3,19 +3,25 @@ package com.example.nl.hammertime;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextClock;
 import android.widget.TimePicker;
 
 import org.json.JSONObject;
 
+import java.io.DataOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.sql.PreparedStatement;
 
 public class SetAlarm extends AppCompatActivity implements View.OnClickListener {
@@ -23,6 +29,7 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
     TimePicker tpAlarmPicker;
     ImageButton ibAlarmBack;
     Button bConfirmAlarm;
+    TextClock tcInvClock;
 
     public static int hourChosen, minuteChosen;
 
@@ -36,6 +43,7 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
         tpAlarmPicker = (TimePicker) findViewById(R.id.tpAlarmPicker);
         ibAlarmBack = (ImageButton) findViewById(R.id.ibAlarmBack);
         bConfirmAlarm = (Button) findViewById(R.id.bConfirmAlarm);
+        tcInvClock = (TextClock) findViewById(R.id.tcInvClock);
 
         bConfirmAlarm.setOnClickListener(this);
         ibAlarmBack.setOnClickListener(this);
@@ -47,30 +55,75 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.bConfirmAlarm:
+
+                boolean bPM = tcInvClock.getText().toString().substring(9,11).equals("PM") ? true : false;
+                String currentHourS = tcInvClock.getText().toString().substring(0, 2);
+                int currentHour = Integer.parseInt(currentHourS);
+                if (bPM)
+                    currentHour += 12;
+                String currentMinuteS = tcInvClock.getText().toString().substring(3, 5);
+                int currentMinute = Integer.parseInt(currentMinuteS);
+                String currentSecS = tcInvClock.getText().toString().substring(6, 8);
+                int currentSec = Integer.parseInt(currentSecS);
+                String currentTime = currentHour + ":" + currentMinute + ":" + currentSec;
+
+                hourChosen = tpAlarmPicker.getHour();
+                minuteChosen = tpAlarmPicker.getMinute();
+
                 //hourChosen = tpAlarmPicker.getBaseline();
                 //int currentApiVersion = android.os.Build.VERSION.SDK_INT;
                 //if (currentApiVersion > android.os.Build.VERSION_CODES.LOLLIPOP_MR1){
 
-                String requestURL = "http://enterURLhere.com";
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+
+                String requestURL = "http://160.39.166.246:8000/alarm_time";
                 URL url;
                 HttpURLConnection conn;
                 try {
                     url = new URL(requestURL);
                     conn = (HttpURLConnection) url.openConnection();
-                    conn.setDoOutput(true);
                     conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setUseCaches(false);
+                    //conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type","application/json");
+                    //conn.setRequestMethod("POST");
                     conn.connect();
+                    //int response = conn.getResponseCode();
 
                     JSONObject jsonParam = new JSONObject();
-                    jsonParam.put("ID", "25");
+                    jsonParam.put("current_time", currentTime);
+                    jsonParam.put("alarm_time", hourChosen + ":" + minuteChosen + ":00");
+
+                    DataOutputStream output;
+
+                    String str = jsonParam.toString();
+                    byte[] data = str.getBytes("UTF-8");
+
+                    //int response = conn.getResponseCode();
+                    output = new DataOutputStream(conn.getOutputStream());
+                    output.write(data);
+                    output.flush();
+                    output.close();
+                    conn.getResponseCode();
+                    conn.disconnect();
+                    /*
+                    OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+                    out.write(jsonParam.toString());
+                    out.close();
+                    output.write();
+                    */
 
 
                 } catch(Exception e) {
                     e.printStackTrace();
+                } finally {
+
                 }
 
-                hourChosen = tpAlarmPicker.getHour();
-                minuteChosen = tpAlarmPicker.getMinute();
+
 
                 /*} else {
                     PreparedStatement pstmt;
