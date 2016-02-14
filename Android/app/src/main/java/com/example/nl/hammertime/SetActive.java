@@ -37,10 +37,10 @@ import java.util.TimerTask;
 
 public class SetActive extends AppCompatActivity implements View.OnClickListener, SensorEventListener{
 
-    final String requestURL = "http://160.39.166.246:9000/user_awake";
+    final String requestURL = "http://160.39.166.246:8017/user_awake";
     final float LIGHT_THRESHHOLD = 15;
     final float ACCEL_THRESHHOLDX = 1.0F, ACCEL_THRESHHOLDY = 0,ACCEL_THRESHHOLDZ = 0;
-    float threshhold = 0, threshholdx = 0, threshholdy = 0, threshholdz = 0;
+    float threshhold = 0, threshholdx = 0, threshholdy = 0, threshholdz = 0;  
     SensorManager sensorManager;
     Sensor extra;
     Sensor sensor;

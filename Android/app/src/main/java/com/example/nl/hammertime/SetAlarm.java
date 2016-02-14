@@ -30,7 +30,7 @@ import java.util.TimeZone;
 
 public class SetAlarm extends AppCompatActivity implements View.OnClickListener {
 
-    final String requestURL = "http://160.39.166.246:9000/alarm_time";
+    final String requestURL = "http://160.39.166.246:8017/alarm_time";
     static final String DATEFORMAT = "yyyy-MM-dd HH:mm:ss";
     TimePicker tpAlarmPicker;
     ImageButton ibAlarmBack;
