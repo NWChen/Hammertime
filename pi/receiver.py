@@ -7,6 +7,7 @@ from flask.ext.cors import CORS
 
 my_ip = "160.39.166.246"
 start_time, end_time = 0, 0
+current_time, end_time = [], []
 
 # initialize app
 app = Flask(__name__)
@@ -26,8 +27,10 @@ class Day(db.Document):
 # alarm settings route
 @app.route('/alarm_time', methods=['POST', 'GET'])
 def alarm_time():
-	payload = request.json	
-	print payload[start_time], payload[end_time] 
+	payload = request.json
+	print payload
+	
+	print payload['current_time'], payload['alarm_time'] 
 	return "Successful request."
 
 @app.route('/get_data')
