@@ -8,6 +8,10 @@
 3. `pip install -r requirements.txt`
 4. `python app.py`
 
+### Deploy
+- `cd Hammertime`
+- `git subtree push --prefix web heroku master`
+
 ### Misc
 #### Color Scheme:
 - blue grey: `#607D8B`
