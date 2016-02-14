@@ -11,6 +11,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.camera2.CameraManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -26,22 +27,30 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SetActive extends AppCompatActivity implements View.OnClickListener, SensorEventListener{
 
-    final String requestURL = "http://160.39.166.246:8000/alarm_time";
+    final String requestURL = "http://160.39.166.246:9000/user_awake";
     final float LIGHT_THRESHHOLD = 15;
+    final float ACCEL_THRESHHOLDX = 1.0F, ACCEL_THRESHHOLDY = 0,ACCEL_THRESHHOLDZ = 0;
+    float threshhold = 0, threshholdx = 0, threshholdy = 0, threshholdz = 0;
     SensorManager sensorManager;
+    Sensor extra;
     Sensor sensor;
     ImageButton ibActiveBack;
     TextView tvLight,tvAlarmTime;
     TextClock tcClock;
     private String cameraId;
-    boolean currBool, prevBool = false;
+    boolean currBool, prevBool = false, inTimer = false;
+    static int seconds = 0;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,8 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_set_active);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mediaPlayer = MediaPlayer.create(this,R.raw.alarm);
 
         /*
         Getting the views from the xml
@@ -63,9 +74,12 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
          */
         boolean isAM = SetAlarm.hourChosen > 12 ? false : true;
         String alarmHours = SetAlarm.hourChosen > 12 ? Integer.toString(SetAlarm.hourChosen - 12 ): Integer.toString(SetAlarm.hourChosen);
-        alarmHours = alarmHours.substring(1,2).equals(":") ? "0" + alarmHours : alarmHours;
+        System.out.println(alarmHours);
+        alarmHours = alarmHours.length() == 1 ? "0" + alarmHours : alarmHours;
+        //alarmHours = alarmHours.substring(1,2).equals(":") ? "0" + alarmHours : alarmHours;
         String alarmMinutes = Integer.toString(SetAlarm.minuteChosen);
-        alarmMinutes = alarmMinutes.substring(1,2).equals(":") ? "0" + alarmMinutes : alarmMinutes;
+        alarmMinutes = alarmMinutes.length() == 1 ? "0" + alarmMinutes : alarmMinutes;
+        //alarmMinutes = alarmMinutes.substring(1,2).equals(":") ? "0" + alarmMinutes : alarmMinutes;
         String alarmTime = isAM ? alarmHours + ":" + alarmMinutes + ":00 AM" : alarmHours + ":" + alarmMinutes + ":00 PM";
         tvAlarmTime.setText(alarmTime);
 
@@ -73,24 +87,18 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
         Setting up different sensors based on which one the user chose
          */
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (com.example.nl.hammertime.Settings.detectChoice == 1)
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if (com.example.nl.hammertime.Settings.detectChoice == 2)
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-    }
-/*
-    private void setupCamera2() {
-        CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        try {
-            for (String cameraId : manager.getCameraIdList()) {
-                CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
-                if (characteristics.get(CameraCharacteristics.LENS_FACING) != CameraCharacteristics.LENS_FACING_FRONT)
-                    continue;
-                this.cameraId = cameraId;
-                int[] picSize = Settings.getPictureSize();
-            }
+        if (com.example.nl.hammertime.Settings.detectChoice == 1) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            threshholdx = ACCEL_THRESHHOLDX;
+            threshholdy = ACCEL_THRESHHOLDY;
+            threshholdz = ACCEL_THRESHHOLDZ;
         }
-  }*/
+
+        if (com.example.nl.hammertime.Settings.detectChoice == 2) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+            threshhold = LIGHT_THRESHHOLD;
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -103,64 +111,87 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        //tvLight.setText("Hi");
+
         float ill = event.values[0];
-        tvLight.setText(Float.toString(ill));
+        float illy = event.values[1];
+        float illz = event.values[2];
+        if (inTimer) {
+            ill = -1;
+            illy = -1;
+            illz = -1;
+        }
+        tvLight.setText(Float.toString(ill) + ", " + Float.toString(illy) + ", " + Float.toString(illz));
         boolean bPM = tcClock.getText().toString().substring(9,11).equals("PM") ? true : false;
         String currentHourS = tcClock.getText().toString().substring(0, 2);
         int currentHour = Integer.parseInt(currentHourS);
-        //if (currentHourS.charAt(0) == '0')
-            //currentHour = Integer.parseInt(currentHourS.substring(1,2));
         if (bPM)
             currentHour += 12;
         String currentMinuteS = tcClock.getText().toString().substring(3, 5);
         int currentMinute = Integer.parseInt(currentMinuteS);
-        //if (currentMinuteS.charAt(0) == '0')
-            //currentMinute = Integer.parseInt(currentMinuteS.substring(1,2));
         if (currentHour > SetAlarm.hourChosen || (currentHour == SetAlarm.hourChosen && currentMinute >= SetAlarm.minuteChosen)) {
             tvLight.setText("YES");
+            currBool = ill > threshhold ? true : false;
+            if (currBool != prevBool) {
 
-            URL url;
-            HttpURLConnection conn;
-            try {
-                //Set up connection
-                url = new URL(requestURL);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                conn.setUseCaches(false);
-                conn.setRequestProperty("Content-Type","application/json");
-                conn.connect();
+                URL url;
+                HttpURLConnection conn;
+                try {
+                    //Set up connection
+                    url = new URL(requestURL);
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setUseCaches(false);
+                    conn.setRequestProperty("Content-Type","application/json");
+                    conn.connect();
 
-                //Set up JSON object
-                JSONObject jsonParam = new JSONObject();
-                currBool = ill > LIGHT_THRESHHOLD ? true : false;
-                if (currBool != prevBool) {
-                    if (ill > LIGHT_THRESHHOLD)
-                        jsonParam.put("isAwake", true);
-                    else
-                        jsonParam.put("isAwake", false);
+
+
+                    //Set up JSON object
+                    JSONObject jsonParam = new JSONObject();
+                    if (threshhold != 0) {
+                        if (ill > threshhold) {
+                            if (mediaPlayer.isPlaying())
+                                mediaPlayer.pause();
+                            jsonParam.put("isAwake", true);
+
+                        }
+
+                        else {
+
+                            mediaPlayer.start();
+                            jsonParam.put("isAwake", false);
+                        }
+
+
+                    } else {
+
+                    }
+
+
+                    //Set up output stream in byte data
+                    DataOutputStream output;
+                    String str = jsonParam.toString();
+                    byte[] data = str.getBytes("UTF-8");
+
+                    //Write output and close connections.
+                    output = new DataOutputStream(conn.getOutputStream());
+                    output.write(data);
+                    output.flush();
+                    output.close();
+                    conn.getResponseCode();
+                    conn.disconnect();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                } finally {
                 }
-                prevBool = currBool;
-                //Set up output stream in byte data
-                DataOutputStream output;
-                String str = jsonParam.toString();
-                byte[] data = str.getBytes("UTF-8");
-
-                //Write output and close connections.
-                output = new DataOutputStream(conn.getOutputStream());
-                output.write(data);
-                output.flush();
-                output.close();
-                conn.getResponseCode();
-                conn.disconnect();
-            } catch(Exception e) {
-                e.printStackTrace();
-            } finally {
             }
+            prevBool = currBool;
         }
-        else
-            tvLight.setText("NO");
+        //else
+            //tvLight.setText("NO");
     }
 
     @Override

@@ -30,7 +30,7 @@ import java.util.TimeZone;
 
 public class SetAlarm extends AppCompatActivity implements View.OnClickListener {
 
-    final String requestURL = "http://160.39.166.246:8000/alarm_time";
+    final String requestURL = "http://160.39.166.246:9000/alarm_time";
     static final String DATEFORMAT = "yyyy-MM-dd HH:mm:ss";
     TimePicker tpAlarmPicker;
     ImageButton ibAlarmBack;
@@ -70,6 +70,8 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
                 String currentSecS = tcInvClock.getText().toString().substring(6, 8);
                 int currentSec = Integer.parseInt(currentSecS);
                 String currentTime = currentHour + ":" + currentMinute + ":" + currentSec;
+                hourChosen = tpAlarmPicker.getHour();
+                minuteChosen = tpAlarmPicker.getMinute();/*
                 int currentApiVersion = android.os.Build.VERSION.SDK_INT;
                 if (currentApiVersion > android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
                     hourChosen = tpAlarmPicker.getHour();
@@ -77,7 +79,7 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
                 } else {
                     hourChosen = tpAlarmPicker.getCurrentHour();
                     minuteChosen = tpAlarmPicker.getCurrentMinute();
-                }
+                }*/
 
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
