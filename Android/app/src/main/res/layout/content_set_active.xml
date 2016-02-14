@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="Current Time"
             android:layout_marginTop="20dp"
-            android:textColor="#2196F3"
+            android:textColor="#ffffff"
             android:gravity="center"
             android:textSize="50dp"/>
 
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:text="Alarm Time"
             android:layout_marginTop="20dp"
-            android:textColor="#2196F3"
+            android:textColor="#ffffff"
             android:gravity="center"
             android:textSize="50dp"/>
 

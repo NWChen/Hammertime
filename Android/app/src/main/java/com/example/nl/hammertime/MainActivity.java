@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button bSetAlarm, bSetActive, bChooseSong;
+    Button bSetAlarm, bSetActive, bSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
