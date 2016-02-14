@@ -1,12 +1,19 @@
 package com.example.nl.hammertime;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraDevice;
+//import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,21 +22,26 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 public class SetActive extends AppCompatActivity implements View.OnClickListener, SensorEventListener{
 
     final String requestURL = "http://160.39.166.246:8000/alarm_time";
+    final float LIGHT_THRESHHOLD = 15;
     SensorManager sensorManager;
     Sensor light;
     ImageButton ibActiveBack;
     TextView tvLight,tvAlarmTime;
     TextClock tcClock;
+    private String cameraId;
+    boolean currBool, prevBool = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +63,24 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
         String alarmTime = isAM ? alarmHours + ":" + alarmMinutes + ":00 AM" : alarmHours + ":" + alarmMinutes + ":00 PM";
         tvAlarmTime.setText(alarmTime);
 
+
+
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         light = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
+/*
+    private void setupCamera2() {
+        CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        try {
+            for (String cameraId : manager.getCameraIdList()) {
+                CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+                if (characteristics.get(CameraCharacteristics.LENS_FACING) != CameraCharacteristics.LENS_FACING_FRONT)
+                    continue;
+                this.cameraId = cameraId;
+                int[] picSize = Settings.getPictureSize();
+            }
+        }
+  }*/
 
     @Override
     public void onClick(View v) {
@@ -67,6 +94,7 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onSensorChanged(SensorEvent event) {
         float ill = event.values[0];
+
         boolean bPM = tcClock.getText().toString().substring(9,11).equals("PM") ? true : false;
         String currentHourS = tcClock.getText().toString().substring(0, 2);
         int currentHour = Integer.parseInt(currentHourS);
@@ -96,8 +124,14 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
 
                 //Set up JSON object
                 JSONObject jsonParam = new JSONObject();
-                jsonParam.put("isAwake", true);
-
+                currBool = ill > LIGHT_THRESHHOLD ? true : false;
+                if (currBool != prevBool) {
+                    if (ill > LIGHT_THRESHHOLD)
+                        jsonParam.put("isAwake", true);
+                    else
+                        jsonParam.put("isAwake", false);
+                }
+                prevBool = currBool;
                 //Set up output stream in byte data
                 DataOutputStream output;
                 String str = jsonParam.toString();
