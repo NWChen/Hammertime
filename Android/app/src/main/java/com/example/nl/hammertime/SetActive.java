@@ -42,6 +42,7 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
     final float ACCEL_THRESHHOLDX = 1.0F, ACCEL_THRESHHOLDY = 0,ACCEL_THRESHHOLDZ = 0;
     float threshhold = 0, threshholdx = 0, threshholdy = 0, threshholdz = 0;
     SensorManager sensorManager;
+    Sensor extra;
     Sensor sensor;
     ImageButton ibActiveBack;
     TextView tvLight,tvAlarmTime;
