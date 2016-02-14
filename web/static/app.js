@@ -1,4 +1,4 @@
-$.getJSON("http://localhost:8080/get_data").then(populateCharts)
+$.getJSON("hammertime.ngrok.com/get_data").then(populateCharts)
 
 function populateCharts(data) {
   var data = data.data;
