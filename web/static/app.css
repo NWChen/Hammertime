@@ -83,6 +83,10 @@ html, body {
   }
 }
 
+#specs {
+  background-color: #fff5e5;
+}
+
 #specs .image {
   min-height: 250px;
   background-size: contain;
@@ -91,35 +95,17 @@ html, body {
 }
 
 #specs .description {
-  margin: 10px 0;
+  margin: 15px 0;
+  color: #607D8B;
   text-align: center;
 }
 
-/* Use this selector to override the line style on a given series */
-.ct-series-a .ct-line {
-  /* Set the colour of this series line */
-  /*stroke: red;*/
-  /* Control the thikness of your lines */
-  /*stroke-width: 5px;*/
-  /* Create a dashed line with a pattern */
-  /*stroke-dasharray: 10px 20px;*/
-}
-
-/* This selector overrides the points style on line charts. Points on line charts are actually just very short strokes. This allows you to customize even the point size in CSS */
 .ct-series-a .ct-point {
-  /* Colour of your points */
   stroke: #2196F3;
-  /* Size of your points */
-  /*stroke-width: 20px;*/
-  /* Make your points appear as squares */
-  /*stroke-linecap: square;*/
 }
-/*BAR CHART*/
 
-/* Use this selector to override bar styles on bar charts. Bars are also strokes so you have maximum freedom in styling them. */
 .ct-series-a .ct-bar {
-  /* Colour of your bars */
   stroke: #2196F3;
-  /* The width of your bars */
   stroke-width: 30px;
 }
+

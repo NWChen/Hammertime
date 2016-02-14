@@ -8,10 +8,20 @@ function populateCharts(data) {
   var wakeUpTimes = []
 
   for (var i = 0; i < data.length; i++) {
-    var alarmTime = data[i].alarm_time["$date"];
-    var wakeUpTime = data[i].wake_up_time["$date"];
-    alarmTimes.push(alarmTime);
-    wakeUpTimes.push(wakeUpTime);
+    var alarmTime = data[i].alarm_time;
+    if (alarmTime) {
+      alarmTimes.push(alarmTime["$date"]);
+    } else {
+      alarmTimes.push(null);
+    }
+    var wakeUpTime = data[i].wake_up_time
+    if (wakeUpTime) {
+      wakeUpTimes.push(wakeUpTime["$date"]);
+    } else {
+      wakeUpTimes.push(null);
+    }
+    
+    
     var now = moment(alarmTime).local(); 
     var then = moment(wakeUpTime).local();
     var minutes = moment.duration(then.diff(now)).minutes();
