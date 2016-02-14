@@ -44,7 +44,8 @@ def user_awake():
 	payload = request.json
 	print payload['isAwake']
 	isAwake = payload['isAwake']
-	if isAwake:
+	if not isAwake:
+		#for i in range(0, 2):
 		#requests.get("http://0.0.0.0")
 		alarm.hammertime()
 	return "Successful request."
@@ -57,6 +58,6 @@ def get_data():
 if __name__ == '__main__':
 	app.run(
 		host="0.0.0.0",
-		port=int("8010")
+		port=int("8017")
 	)
 

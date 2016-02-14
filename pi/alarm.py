@@ -7,13 +7,13 @@ class Alarm:
 	def __init__(self):
 		self.alarm_file = "alarm.mp3"
 		try:
-			self.ser = serial.Serial('/dev/ttyACM0', 9600)	
+			self.ser = serial.Serial('/dev/ttyACM2', 9600)	
 		except (RuntimeError, TypeError, NameError):
-			self.ser = serial.Serial('/dev/ttyACM1', 9600)
+			self.ser = serial.Serial('/dev/ttyACM0', 9600)
 		self.is_playing = False
-		pygame.init()
-		pygame.mixer.init()
-		pygame.mixer.music.load("alarm.mp3")
+		#pygame.init()
+		#pygame.mixer.init()
+		#pygame.mixer.music.load("alarm.mp3")
 				
 	def play_sound(self):
 		if not self.is_playing:
