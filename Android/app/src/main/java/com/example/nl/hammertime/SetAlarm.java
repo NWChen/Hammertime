@@ -23,10 +23,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class SetAlarm extends AppCompatActivity implements View.OnClickListener {
 
     final String requestURL = "http://160.39.166.246:8000/alarm_time";
+    static final String DATEFORMAT = "yyyy-MM-dd HH:mm:ss";
     TimePicker tpAlarmPicker;
     ImageButton ibAlarmBack;
     Button bConfirmAlarm;
@@ -92,8 +97,17 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
 
                     //Set up JSON object
                     JSONObject jsonParam = new JSONObject();
+
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                    currentTime = calendar.getTime().toString();
+                    calendar.set(Calendar.HOUR, hourChosen);
+                    calendar.set(Calendar.MINUTE, minuteChosen);
+                    calendar.set(Calendar.SECOND, 0);
+                    String alarmTime = calendar.getTime().toString();
+
                     jsonParam.put("current_time", currentTime);
-                    jsonParam.put("alarm_time", hourChosen + ":" + minuteChosen + ":00");
+                    jsonParam.put("alarm_time", alarmTime);
+                    //jsonParam.put("alarm_time", hourChosen + ":" + minuteChosen + ":00");
 
                     //Set up output stream in byte data
                     DataOutputStream output;
@@ -108,7 +122,10 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
                     conn.getResponseCode();
                     conn.disconnect();
 
+                    Snackbar.make(v, "Alarm Confirmed", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
                 } catch(Exception e) {
+                    Snackbar.make(v, "Error Occurred", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     e.printStackTrace();
                 } finally {
 

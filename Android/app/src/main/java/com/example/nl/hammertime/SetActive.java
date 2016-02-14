@@ -63,8 +63,6 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
         String alarmTime = isAM ? alarmHours + ":" + alarmMinutes + ":00 AM" : alarmHours + ":" + alarmMinutes + ":00 PM";
         tvAlarmTime.setText(alarmTime);
 
-
-
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         light = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
@@ -144,13 +142,10 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
                 output.close();
                 conn.getResponseCode();
                 conn.disconnect();
-
             } catch(Exception e) {
                 e.printStackTrace();
             } finally {
-
             }
-
         }
         else
             tvLight.setText("NO");
