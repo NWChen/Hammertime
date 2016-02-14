@@ -10,10 +10,63 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.nl.hammertime.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:background="@drawable/bg_grad">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hammer Time"
+            android:textSize="50dp"
+            android:typeface="serif"
+            android:textColor="#ffffff"
+            android:layout_marginTop="50dp"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/bSetAlarm"
+            android:text="Set Alarm"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_whiteborder"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textSize="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/bChooseSong"
+            android:text="Choose Song"
+            android:textSize="18dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_whiteborder"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/bSetActive"
+            android:text="Set Active"
+            android:textSize="18dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_whiteborder"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 </RelativeLayout>
