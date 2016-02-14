@@ -6,10 +6,6 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.blue_grey-blue.min.css" /> 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='app.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-    <script defer src="https://code.getmdl.io/1.1.1/material.min.js"></script>
-    <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script> -->
-    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
   </head>
 <body>
   <!-- Always shows a header, even in smaller screens. -->
@@ -22,6 +18,7 @@
         <div class="mdl-layout-spacer"></div>
         <!-- Navigation. We hide it in small screens. -->
         <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="/">Home</a>
           <a class="mdl-navigation__link" href="/dashboard">Dashboard</a>
         </nav>
       </div>
@@ -29,6 +26,7 @@
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">HammerTime</span>
       <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="/">Home</a>
         <a class="mdl-navigation__link" href="/dashboard">Dashboard</a>
       </nav>
     </div>
@@ -36,5 +34,10 @@
       <div class="page-content">{% block body %}{% endblock %}</div>
     </main>
   </div>
+  <script defer src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+  <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
