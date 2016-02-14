@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 
 public class SetAlarm extends AppCompatActivity implements View.OnClickListener {
 
+    final String requestURL = "http://160.39.166.246:8000/alarm_time";
     TimePicker tpAlarmPicker;
     ImageButton ibAlarmBack;
     Button bConfirmAlarm;
@@ -47,8 +48,6 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
 
         bConfirmAlarm.setOnClickListener(this);
         ibAlarmBack.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -66,75 +65,58 @@ public class SetAlarm extends AppCompatActivity implements View.OnClickListener 
                 String currentSecS = tcInvClock.getText().toString().substring(6, 8);
                 int currentSec = Integer.parseInt(currentSecS);
                 String currentTime = currentHour + ":" + currentMinute + ":" + currentSec;
-
-                hourChosen = tpAlarmPicker.getHour();
-                minuteChosen = tpAlarmPicker.getMinute();
-
-                //hourChosen = tpAlarmPicker.getBaseline();
-                //int currentApiVersion = android.os.Build.VERSION.SDK_INT;
-                //if (currentApiVersion > android.os.Build.VERSION_CODES.LOLLIPOP_MR1){
+                int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+                if (currentApiVersion > android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    hourChosen = tpAlarmPicker.getHour();
+                    minuteChosen = tpAlarmPicker.getMinute();
+                } else {
+                    hourChosen = tpAlarmPicker.getCurrentHour();
+                    minuteChosen = tpAlarmPicker.getCurrentMinute();
+                }
 
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
 
-                String requestURL = "http://160.39.166.246:8000/alarm_time";
                 URL url;
                 HttpURLConnection conn;
                 try {
+                    //Set up connection
                     url = new URL(requestURL);
                     conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setDoInput(true);
                     conn.setDoOutput(true);
                     conn.setUseCaches(false);
-                    //conn.setDoOutput(true);
                     conn.setRequestProperty("Content-Type","application/json");
-                    //conn.setRequestMethod("POST");
                     conn.connect();
-                    //int response = conn.getResponseCode();
 
+                    //Set up JSON object
                     JSONObject jsonParam = new JSONObject();
                     jsonParam.put("current_time", currentTime);
                     jsonParam.put("alarm_time", hourChosen + ":" + minuteChosen + ":00");
 
+                    //Set up output stream in byte data
                     DataOutputStream output;
-
                     String str = jsonParam.toString();
                     byte[] data = str.getBytes("UTF-8");
 
-                    //int response = conn.getResponseCode();
+                    //Write output and close connections.
                     output = new DataOutputStream(conn.getOutputStream());
                     output.write(data);
                     output.flush();
                     output.close();
                     conn.getResponseCode();
                     conn.disconnect();
-                    /*
-                    OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-                    out.write(jsonParam.toString());
-                    out.close();
-                    output.write();
-                    */
-
 
                 } catch(Exception e) {
                     e.printStackTrace();
                 } finally {
 
                 }
-
-
-
-                /*} else {
-                    PreparedStatement pstmt;
-                    hourChosen = tpAlarmPicker.getCurrentHour();
-                    minuteChosen = tpAlarmPicker.getCurrentMinute();
-                }*/
                 break;
             case R.id.ibAlarmBack:
                 startActivity(new Intent(this, MainActivity.class));
                 break;
-
         }
     }
 }

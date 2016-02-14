@@ -11,7 +11,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.nl.hammertime.SetAlarm"
     tools:showIn="@layout/activity_set_alarm"
-    android:background="@drawable/bg_grad">
+    android:background="@drawable/bluegray">
 
     <LinearLayout
         android:layout_width="match_parent"
