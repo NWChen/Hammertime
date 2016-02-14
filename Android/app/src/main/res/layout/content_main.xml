@@ -42,8 +42,8 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/bChooseSong"
-            android:text="Choose Song"
+            android:id="@+id/bSettings"
+            android:text="Settings"
             android:textSize="18dp"
             android:textColor="#ffffff"
             android:background="@drawable/button_whiteborder"

@@ -4,4 +4,5 @@
     <string name="title_activity_set_alarm">SetAlarm</string>
     <string name="title_activity_choose_song">ChooseSong</string>
     <string name="title_activity_set_active">SetActive</string>
+    <string name="title_activity_settings">Settings</string>
 </resources>

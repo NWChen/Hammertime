@@ -36,7 +36,7 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
     final String requestURL = "http://160.39.166.246:8000/alarm_time";
     final float LIGHT_THRESHHOLD = 15;
     SensorManager sensorManager;
-    Sensor light;
+    Sensor sensor;
     ImageButton ibActiveBack;
     TextView tvLight,tvAlarmTime;
     TextClock tcClock;
@@ -50,11 +50,17 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
+        Getting the views from the xml
+         */
         ibActiveBack = (ImageButton) findViewById(R.id.ibActiveBack);
         tvLight = (TextView) findViewById(R.id.tvLight);
         tcClock = (TextClock) findViewById(R.id.tcClock);
         tvAlarmTime = (TextView) findViewById(R.id.tvAlarmTime);
 
+        /*
+        Set the alarm and current time
+         */
         boolean isAM = SetAlarm.hourChosen > 12 ? false : true;
         String alarmHours = SetAlarm.hourChosen > 12 ? Integer.toString(SetAlarm.hourChosen - 12 ): Integer.toString(SetAlarm.hourChosen);
         alarmHours = alarmHours.substring(1,2).equals(":") ? "0" + alarmHours : alarmHours;
@@ -63,8 +69,14 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
         String alarmTime = isAM ? alarmHours + ":" + alarmMinutes + ":00 AM" : alarmHours + ":" + alarmMinutes + ":00 PM";
         tvAlarmTime.setText(alarmTime);
 
+        /*
+        Setting up different sensors based on which one the user chose
+         */
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        light = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        if (com.example.nl.hammertime.Settings.detectChoice == 1)
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        if (com.example.nl.hammertime.Settings.detectChoice == 2)
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
 /*
     private void setupCamera2() {
@@ -92,7 +104,7 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onSensorChanged(SensorEvent event) {
         float ill = event.values[0];
-
+        tvLight.setText(Float.toString(ill));
         boolean bPM = tcClock.getText().toString().substring(9,11).equals("PM") ? true : false;
         String currentHourS = tcClock.getText().toString().substring(0, 2);
         int currentHour = Integer.parseInt(currentHourS);
@@ -155,7 +167,7 @@ public class SetActive extends AppCompatActivity implements View.OnClickListener
     protected void onResume() {
         // Register a listener for the sensor.
         super.onResume();
-        sensorManager.registerListener(this, light, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override

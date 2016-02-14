@@ -24,11 +24,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button bSetAlarm = (Button) findViewById(R.id.bSetAlarm);
         Button bSetActive = (Button) findViewById(R.id.bSetActive);
-        Button bChooseSong = (Button) findViewById(R.id.bChooseSong);
+        Button bSettings = (Button) findViewById(R.id.bSettings);
 
         bSetAlarm.setOnClickListener(this);
         bSetActive.setOnClickListener(this);
-        bChooseSong.setOnClickListener(this);
+        bSettings.setOnClickListener(this);
 
     }
 
@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bSetActive:
                 startActivity(new Intent(this, SetActive.class));
                 break;
-            case R.id.bChooseSong:
+            case R.id.bSettings:
+                startActivity(new Intent(this, Settings.class));
                 break;
         }
     }
