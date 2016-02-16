@@ -1,9 +1,8 @@
 # Hammertime
 Wakes you up with force and prejudice.
+Hammertime is a device which hits you with a motorized stick until you get up (for good). Whether you're properly awake is detected by an Android app, which also serves as an interface for the alarm clock. Audio, lights, and hammer are activated when you're being stubbornly sleepy.
 
-TODO:
-- [ ] Reconfigure wifi for hotspot for demo.
-- [ ] Make uinput auto start on boot for omxplayer audio on pi.
+http://devpost.com/software/hammertime
 
 =======
 ## HammerTime Web App
